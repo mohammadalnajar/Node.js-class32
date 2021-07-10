@@ -59,6 +59,22 @@ function updateBlog(req, res) {
     res.status(400).send("Blog not found");
   }
 }
+
+// Deleting blogs  ===================
+
+app.delete("/blogs/:title", (req, res) => deleteBlog(req, res));
+
+function deleteBlog(req, res) {
+  if (fs.existsSync(`./blogs/${req.params.title.toLowerCase()}`)) {
+    fs.unlink(`./blogs/${req.params.title.toLowerCase()}`, (err) => {
+      if (err) throw err;
+      res.status(200).send("Blog was deleted");
+    });
+  } else {
+    res.status(400).send("Blog not found");
+  }
+}
+
 function isInValid(req) {
   if (
     typeof req.body == "undefined" ||
