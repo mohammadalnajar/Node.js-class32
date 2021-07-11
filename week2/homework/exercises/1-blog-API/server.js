@@ -86,7 +86,7 @@ function deleteBlog(req, res) {
   }
 }
 
-// Reading blogs  ===================
+// Reading single blog  ===================
 
 app.get("/blogs/:title", (req, res) => getBlogByTitle(req, res));
 
@@ -99,6 +99,22 @@ function getBlogByTitle(req, res) {
     });
   } else {
     res.status(404).send("This post does not exist!");
+  }
+}
+
+// Reading all blogs  ===================
+
+app.get("/blogs", (req, res) => getBlogs(req, res));
+
+function getBlogs(req, res) {
+  const files = fs.readdirSync("./blogs");
+  if (files.length > 0) {
+    const filesArray = files.map((file) => {
+      return { title: file };
+    });
+    res.status(200).send(filesArray);
+  } else {
+    res.status(404).send("No blogs found");
   }
 }
 
