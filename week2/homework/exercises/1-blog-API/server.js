@@ -1,9 +1,8 @@
 const express = require("express");
 const fs = require("fs");
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
-// YOUR CODE GOES IN HERE
 
 app.get("/", function (req, res) {
   res.send("Hello World");
@@ -24,13 +23,17 @@ function createBlog(req, res) {
       (file) => file.toLowerCase() === data.title.toLowerCase()
     );
     if (found) {
-      res.send("This blog is already existed");
+      res.status(405).send("This blog is already existed");
       return;
     }
     fs.writeFile(`./blogs/${data.title.toLowerCase()}`, data.content, (err) => {
-      if (err) throw err;
+      if (err) {
+        console.log(err);
+        res.status(500).send("something went wrong in the server");
+        return;
+      }
       console.log("The blog has been saved!");
-      res.status(200).send("ok");
+      res.status(201).send("ok");
     });
   });
 }
@@ -40,23 +43,25 @@ function createBlog(req, res) {
 app.put("/blogs/:title", (req, res) => updateBlog(req, res));
 
 function updateBlog(req, res) {
+  console.log(req.params.title.split("-").join(" ").toLowerCase());
   if (isInValid(req)) {
     res.status(400).send("Invalid Request");
     return;
   }
   const data = req.body;
-  if (fs.existsSync(`./blogs/${req.params.title.toLowerCase()}`)) {
-    fs.writeFile(
-      `./blogs/${req.params.title.toLowerCase()}`,
-      data.content,
-      (err) => {
-        if (err) throw err;
-        console.log("The blog has been updated!");
-        res.status(200).send("ok");
+  const paramsTitle = req.params.title.split("-").join(" ").toLowerCase();
+  if (fs.existsSync(`./blogs/${paramsTitle}`)) {
+    fs.writeFile(`./blogs/${paramsTitle}`, data.content, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("something went wrong in the server");
+        return;
       }
-    );
+      console.log("The blog has been updated!");
+      res.status(200).send("ok");
+    });
   } else {
-    res.status(400).send("Blog not found");
+    res.status(404).send("Blog not found");
   }
 }
 
@@ -65,13 +70,35 @@ function updateBlog(req, res) {
 app.delete("/blogs/:title", (req, res) => deleteBlog(req, res));
 
 function deleteBlog(req, res) {
-  if (fs.existsSync(`./blogs/${req.params.title.toLowerCase()}`)) {
-    fs.unlink(`./blogs/${req.params.title.toLowerCase()}`, (err) => {
-      if (err) throw err;
+  const paramsTitle = req.params.title.split("-").join(" ").toLowerCase();
+
+  if (fs.existsSync(`./blogs/${paramsTitle}`)) {
+    fs.unlink(`./blogs/${paramsTitle}`, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("something went wrong in the server");
+        return;
+      }
       res.status(200).send("Blog was deleted");
     });
   } else {
-    res.status(400).send("Blog not found");
+    res.status(404).send("Blog not found");
+  }
+}
+
+// Reading blogs  ===================
+
+app.get("/blogs/:title", (req, res) => getBlogByTitle(req, res));
+
+function getBlogByTitle(req, res) {
+  const paramsTitle = req.params.title.split("-").join(" ").toLowerCase();
+
+  if (fs.existsSync(`./blogs/${paramsTitle}`)) {
+    fs.readFile(`./blogs/${paramsTitle}`, (err, content) => {
+      res.status(200).send(content);
+    });
+  } else {
+    res.status(404).send("This post does not exist!");
   }
 }
 
