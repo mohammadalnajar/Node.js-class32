@@ -18,7 +18,8 @@ app.post("/weather", (req, res) => {
   const cityName = req.body.cityName;
   console.log(req.body.cityName);
 
+  res.status(200).send(cityName);
   //rendering the weather page
-  res.status(200).render("weather", { cityName });
+  // res.status(200).render("weather", { cityName });
 });
 app.listen(3000, () => console.log("server started ..."));
