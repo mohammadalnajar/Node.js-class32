@@ -1,1 +1,0 @@
-GET https://api.openweathermap.org/data/2.5/weather?q=amsterdam&APPID=0db531bacfbee33e5f5537c3679862fb
