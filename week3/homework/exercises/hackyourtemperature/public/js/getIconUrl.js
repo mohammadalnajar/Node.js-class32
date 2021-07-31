@@ -4,9 +4,6 @@ function getIconUrl(description) {
     case "clouds":
       url = "../img/clouds.png";
       break;
-    case "clear":
-      url = "../img/sunny.png";
-      break;
     case "clear sky":
       url = "../img/sunny.png";
       break;

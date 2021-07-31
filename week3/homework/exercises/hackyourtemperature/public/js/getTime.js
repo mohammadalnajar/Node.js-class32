@@ -1,18 +1,22 @@
 function calcTime(city, offset) {
   // create Date object for current location
-  const d = new Date();
+  const date = new Date();
 
   // convert to msec
   // add local time zone offset
   // get UTC time in msec
-  const utc = d.getTime() + d.getTimezoneOffset() * 60000;
+  const utc = date.getTime() + date.getTimezoneOffset() * 60000;
 
   // create new Date object for different city
   // using supplied offset
-  const nd = new Date(utc + 3600000 * offset);
+  const newDate = new Date(utc + 3600000 * offset);
 
   // return time as a string
-  return { city, date: nd.toDateString(), time: nd.toLocaleTimeString() };
+  return {
+    city,
+    date: newDate.toDateString(),
+    time: newDate.toLocaleTimeString(),
+  };
 }
 module.exports = calcTime;
 

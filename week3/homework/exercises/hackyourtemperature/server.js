@@ -1,11 +1,9 @@
 const express = require("express");
 const exphbs = require("express-handlebars");
-const moment = require("moment");
 const fetch = require("node-fetch");
-const calcTime = require("./public/js/getTime");
-const secToHours = require("./public/js/secToHour");
 const port = 5566;
 const app = express();
+const API_KEY = require("./sources/keys.json").API_KEY;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // middleware to handle the content-type application/x-www-form-urlencoded
@@ -23,7 +21,6 @@ app.get("/", (req, res) => {
 app.post("/weather", (req, res) => {
   const cityName = req.body.cityName;
 
-  const API_KEY = require("./sources/keys.json").API_KEY;
   fetch(
     `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&APPID=${API_KEY}`
   )
