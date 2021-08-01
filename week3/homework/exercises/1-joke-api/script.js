@@ -12,11 +12,13 @@
 
 const fetch = require("node-fetch");
 
-function printChuckNorrisJoke() {
+(async () => {
   // YOUR CODE GOES IN HERE
-  fetch("http://api.icndb.com/jokes/random")
-    .then((res) => res.json())
-    .then(console.log);
-}
-
-printChuckNorrisJoke();
+  try {
+    const response = await fetch("http://api.icndb.com/jokes/random");
+    const data = await response.json();
+    console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+})();

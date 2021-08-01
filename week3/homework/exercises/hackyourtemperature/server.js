@@ -27,7 +27,7 @@ app.post("/weather", (req, res) => {
     .then((res) => res.json())
     .then((response) => {
       if (response.message) {
-        res.status(404).render("index", { weatherText: response.message });
+        res.status(404).render("index", { error: response.message });
         return;
       }
       const data = require("./public/js/orderingWeatherData")(

@@ -6,22 +6,27 @@
 .hide {
   display: none;
 }
+
 #not-found {
   color: red;
 }
+
 #form div,
 #form label {
   margin: 10px 0;
 }
+
 .header {
   margin: 10px 20px;
 }
+
 #form {
   width: 100%;
 }
 /*  */
 
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,500,700,900,300);
+
 body {
   width: 100%;
   height: 100%;
@@ -31,12 +36,14 @@ body {
   font-family: "Roboto", Helvetica, Arial, sans-serif;
   color: #fff;
 }
+
 .wrapper {
   margin-top: 20px;
   display: flex;
   justify-content: center;
   flex-direction: column;
 }
+
 .widget-container {
   width: 600px;
   height: 400px;
@@ -93,9 +100,11 @@ p {
   font-weight: 900;
   font-size: 25px;
 }
+
 #city:first-letter {
   text-transform: capitalize;
 }
+
 #day {
   font-weight: 700;
   font-size: 25px;

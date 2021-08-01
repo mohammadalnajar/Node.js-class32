@@ -1,28 +1,33 @@
 const calcTime = require("./getTime");
-const secToHours = require("./secToHour");
 const moment = require("moment");
+const { secToHours, tempKToC, tempKToF } = require("./convert");
 
 function weatherData(response, cityName) {
-  const { temp, pressure, humidity } = response.main,
-    { lon, lat } = response.coord,
-    { country, sunrise, sunset } = response.sys,
-    { description } = response.weather[0],
-    { timezone } = response,
-    { speed } = response.wind,
-    cTemp = Math.floor(require("./tempKToC")(temp)),
-    fTemp = Math.floor(require("./tempKToF")(temp)),
-    offset =
-      timezone < 0 ? `-${secToHours(timezone)}` : `+${secToHours(timezone)}`,
-    { date, time } = calcTime(cityName, offset),
-    sunriseTime = moment
-      .unix(sunrise)
-      .utcOffset(offset * 60)
-      .format("HH:mm"),
-    sunsetTime = moment
-      .unix(sunset)
-      .utcOffset(offset * 60)
-      .format("HH:mm"),
-    iconUrl = require("./getIconUrl")(description);
+  const { main, coord, sys, weather, timezone, wind } = response;
+
+  const { temp, pressure, humidity } = main;
+  const { lon, lat } = coord;
+  const { country, sunrise, sunset } = sys;
+  const { description } = weather[0];
+  const { speed } = wind;
+
+  const cTemp = Math.floor(tempKToC(temp));
+  const fTemp = Math.floor(tempKToF(temp));
+
+  const offset =
+    timezone < 0 ? `-${secToHours(timezone)}` : `+${secToHours(timezone)}`;
+  const { date, time } = calcTime(cityName, offset);
+  const sunriseTime = moment
+    .unix(sunrise)
+    .utcOffset(offset * 60)
+    .format("HH:mm");
+  const sunsetTime = moment
+    .unix(sunset)
+    .utcOffset(offset * 60)
+    .format("HH:mm");
+
+  const iconUrl = require("./getIconUrl")(description);
+
   return {
     cityName,
     cTemp,
