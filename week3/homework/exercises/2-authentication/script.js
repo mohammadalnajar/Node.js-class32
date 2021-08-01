@@ -10,10 +10,12 @@
 const fetch = require("node-fetch");
 async function printBooks() {
   try {
+    const credentials = Buffer.from("admin:hvgX8KlVEa").toString("base64");
+
     const response = await fetch(
       "https://restapiabasicauthe-sandbox.mxapps.io/api/books",
       {
-        headers: { Authorization: "Basic YWRtaW46aHZnWDhLbFZFYQ==" },
+        headers: { Authorization: `Basic ${credentials}` },
       }
     );
     const data = await response.json();
