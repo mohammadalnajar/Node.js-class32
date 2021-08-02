@@ -42,7 +42,7 @@ function drawCard() {
  * Given an array, return an element from it chosen at random
  */
 function getRandomElement(array) {
-  const randomNum = Math.floor(Math.random() * 7);
+  const randomNum = Math.floor(Math.random() * array.length);
   return array[randomNum];
 }
 
